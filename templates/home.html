@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Trends{% endblock %}
+
+{% block body %}
+    <h1 class="text-center my-3 display-2">Explore Twitter Trends</h1>
+    <div id="tweets_overlay" >
+        
+        <div class="container mx-auto my-3 p-2 text-center bg-dark rounded shadow " id="tweetsBox">
+            <div class="d-flex justify-content-center mt-3" id="tweetSpinner"></div>
+            <div class="d-flex bd-highlight">
+                <div class="p-2 flex-grow-1 bd-highlight text-center"><h1 id="trendTitle">Test</h1></div>
+                <div class="p-2 bd-highlight">
+                    <button type="button" class="close text-white" aria-label="Close" id="close_button">
+                        <span aria-hidden="true">&times;</span>
+                    </button></div>
+              </div>            
+            
+            <div class="card-columns" id="tweetsArea">
+
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto text-center mt-5" id="locations">
+        <div class="btn-group btn-group-lg" role="group" aria-label="Button group with nested dropdown">
+            {% for location in locations %}
+                <button type="button" class="btn btn-outline-primary locationButton" data-woeid={{ locations[location]["id"] }} data-code={{ location }} data-name="{{ locations[location]["name"] }}">{{ locations[location]["name"] }}</button>
+            {% endfor %}
+          
+            <div class="btn-group btn-group-lg" role="group">
+              <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                More
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="locationsDropdown">
+                {% for country in all_locations %}
+                <button type="button" class="dropdown-item locationButton" data-woeid={{ all_locations[country]["id"] }} data-code={{ country }} data-name="{{ all_locations[country]["name"] }}">{{ all_locations[country]["name"] }}</button>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <div class="container shadow rounded mx-auto my-2 p-3 bg-light border border-dark">
+        
+        <h1 id="locationTitle" class="text-center text-primary">Pick a location!</h1>
+        <hr>
+        <div class="d-flex justify-content-center spinner mt-3" id="trendSpinner"></div>
+        <div class="card-columns" id="trendsArea"></div>
+    </div>
+{% endblock %}
