@@ -28,8 +28,8 @@ I would like to make the site look better. As it is, it looks super plain. Also,
 ## Setup
 Add a `auth.json` file to the project directory and add in your Twitter API keys: Consumer key, Consumer secret.
 The file should look like so:
-    {
+    `{
         "API_KEY": "insert_key_here",
         "API_SECRET": "insert_secret_here"
 
-    }
+    }`
