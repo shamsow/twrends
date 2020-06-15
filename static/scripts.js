@@ -1,16 +1,10 @@
+// Close button for the tweets overlay
 $('#close_button').click(function () {
     // document.getElementById("tweets_overlay").style.display = 'none';
     $("#tweets_overlay").toggle();
 });
-// $("#tweets_overlay").click(function () {
-//     document.getElementById("tweets_overlay").style.display = 'none';
-// })
+// When a trend button is clicked, make an AJAX request to the server to get the tweets
 const get_tweets = e => {
-    // $("#tweets_overlay").click(function () {
-    //     $("#tweets_overlay").toggle("fast");
-    // });
-
-
     // console.log($(this).data("query"));
     console.log(e.dataset.query);
     let tweetsArea = $("#tweetsArea");
@@ -33,30 +27,26 @@ const get_tweets = e => {
         dataType: 'json',
         success: function (data) {
             tweetsArea.empty();
-            $("#tweetSpinner").empty()
+            $("#tweetSpinner").empty();
 
 
             let result = data["result"];
             let title = e.dataset.query;
             let searchUrl = e.dataset.url;
-            // trendTitle.text(title);
-            trendTitle.append(`<a class="text-decoration-none text-info" href=${searchUrl}>${title}</a>`)
+            trendTitle.append(`<a class="text-decoration-none text-info" href=${searchUrl}>${title}</a>`);
             console.log(data);
-            // tweetsArea.append(data['result']);
 
             let i;
             for (i=0; i < data.result.length; i++) {
-                // tweetsArea.append(result[i]);
                 tweetsArea.append(`
                 <div class="card">${result[i]}</div>
                 `);
                 
             };
-            // $('body').append('<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><\/\script>')
         }
     });
 };
-
+// Get the trends for a location when a location button is clicked
 $('.locationButton').click(function () {
     console.log($(this).data("woeid"));
     let trendsArea = $("#trendsArea");
@@ -67,7 +57,6 @@ $('.locationButton').click(function () {
             <span class="sr-only">Loading...</span>
         </div>
     `);
-    // $("#trendSpinner").toggle()
     $.ajax({
         url: 'ajax/trends',
         data: {
@@ -80,7 +69,6 @@ $('.locationButton').click(function () {
 
             let result = data["result"];
             console.log(data);
-            // $('#resultsArea').append(data['result']);
 
             let i;
             for (i=0; i < data.result.length; i++) {
@@ -90,8 +78,6 @@ $('.locationButton').click(function () {
                         <span class="sr-only">unread messages</span>
                     </button>
                 `);
-                
-
             };
         }
     });

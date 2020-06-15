@@ -5,13 +5,14 @@ from helper import create_embed, get_tweets
 from api import TwitterAPI
 
 app = Flask(__name__)
-
+# Initialise the API class to get trending data
 twitter = TwitterAPI()
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-def get_locations(directory="locations", filename="locations-small.json"):
+def get_locations(directory="locations", filename="locations-small.json") -> dict:
+    """Read a location JSON file and return the location data"""
     with open(os.path.join(directory, filename), 'r') as f:
         data = json.load(f)
     woeid = {}
@@ -20,7 +21,9 @@ def get_locations(directory="locations", filename="locations-small.json"):
 
     return woeid
 
-def in_thousands(n):
+
+def in_thousands(n) -> str:
+    """Convert a large number in to thousands"""
     try:
         n = int(n) / 1000
         return f"{n:.2f}K"
@@ -34,11 +37,6 @@ def index():
     shortlist_locations = get_locations()
     all_locations = get_locations(filename="locations.json")
 
-
-    # print(get_tweets("day")[0].link)
-    # url = 'https://twitter.com/jack/status/20'
-    # url = get_tweets("day")[0].link
-    # link = create_embed(url)
     return render_template("home.html", locations=shortlist_locations, all_locations=all_locations)
 
 
@@ -46,10 +44,13 @@ def index():
 def trends():
     woeid = request.args.get('woeid', None)
     # print(woeid)
-    trends = twitter.get_trending("trends", id=woeid)
-    titles = [(trend["name"], in_thousands(trend["tweet_volume"]), trend["url"]) for trend in trends]
-    # print(titles)
-    return jsonify(result=titles)
+    if woeid is not None:
+        trends = twitter.get_trending("trends", id=woeid)
+        titles = [(trend["name"], in_thousands(trend["tweet_volume"]), trend["url"]) for trend in trends]
+        # print(titles)
+        return jsonify(result=titles)
+    else:
+        return "Unknown location"
 
 
 @app.route('/ajax/tweets')
@@ -57,18 +58,15 @@ def tweets():
     
     q = request.args.get('q', None)
     if q is not None:
-    # trends = twitter.get_trending("trends", "trends.json", id=2352824)
-    # titles = [trend["name"] for trend in trends]
-        print("searching twitter")
+        print("Searching twitter")
         tweets = get_tweets(q)
         print(len(tweets))
         urls = [tw.link for tw in tweets[:8]]
-        # links = [create_embed(url)[:-147] for url in urls]
-        print("creating embed links")
+        print("Creating embed links")
         links = [create_embed(url) for url in urls]
     
-        print(q, links[-1])
-        return jsonify(result=links, trend=q)
+        # print(q, links[-1])
+        return jsonify(result=links)
     else:
         return "NO RESULTS"
 

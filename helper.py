@@ -2,15 +2,6 @@ import os
 import twint
 import requests
 
-# c = twint.Config()
-# c.Search = "men"
-# c.Min_likes = 30000
-# c.Limit = 20
-# c.Output = "men.json"
-# c.Year = '2020'
-# c.Store_json = True
-# twint.run.Search(c)
-
 def main():
     print(get_tweets("anime"))
 
