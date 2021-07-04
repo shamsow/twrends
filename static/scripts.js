@@ -1,3 +1,4 @@
+
 // Close button for the tweets overlay
 $('#close_button').click(function () {
     // document.getElementById("tweets_overlay").style.display = 'none';
@@ -69,16 +70,27 @@ $('.locationButton').click(function () {
 
             let result = data["result"];
             console.log(data);
-
+            
             let i;
             for (i=0; i < data.result.length; i++) {
                 trendsArea.append(`
-                    <button type="button" class="btn btn-info btn-lg m-2 trendButton" onclick='get_tweets(this)' data-query="${result[i][0]}" data-url="${result[i][2]}">
+                    <button type="button" class="grid-item btn btn-info btn-lg m-2 trendButton" onclick='get_tweets(this)' data-query="${result[i][0]}" data-url="${result[i][2]}">
                         ${result[i][0]} <span class="badge badge-secondary">${result[i][1]}</span>
                         <span class="sr-only">unread messages</span>
                     </button>
                 `);
             };
+            // Destroy previous instance of masonry
+            $('.grid').masonry('destroy');
+            $('.grid').removeData('masonry');
+            // Reinitialize masonry
+            $('.grid').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: 20
+              });            
         }
     });
 });
+
+
